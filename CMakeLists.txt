@@ -41,11 +41,21 @@ aux_source_directory(${CMAKE_SOURCE_DIR}/src src_dir)
 set (HEADERS ${CMAKE_SOURCE_DIR}/libxdc.h)
 ADD_LIBRARY(xdc STATIC ${src_dir} ${HEADERS})
 
-target_include_directories(xdc PUBLIC "C:/Program Files (x86)/capstone/include")
+target_include_directories(xdc PRIVATE ./include)
+
+if (WINDOWS)
+	target_include_directories(xdc PUBLIC ${CMAKE_SOURCE_DIR}/../capstone/out/include)
+endif()
 
 set_target_properties(xdc PROPERTIES PUBLIC_HEADER ${HEADERS})
 
-install(TARGETS xdc
-		ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}
- 		LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}
-		PUBLIC_HEADER DESTINATION /usr/include)
+# install(TARGETS xdc
+# 		ARCHIVE DESTINATION /usr/local/lib
+#  		LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}
+# 		PUBLIC_HEADER DESTINATION /usr/include)
+
+# target_compile_definitions(xdc PRIVATE DEBUG_TRACES)
+
+# Test libxdc
+# add_executable(ipt_test test/ipt_test.cc)
+# target_link_libraries(ipt_test PRIVATE xdc /usr/local/lib64/libcapstone.a)
